@@ -1,0 +1,4 @@
+# Тестовые данные
+GET http://localhost:1436/api HTTP/1.1
+
+###

@@ -1,0 +1,70 @@
+{
+  "api": {
+    "cities": [
+      "Paris",
+      "Cologne",
+      "Brussels",
+      "Amsterdam",
+      "Hamburg",
+      "Dusseldorf"
+    ],
+    "descriptions": [
+      "A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.",
+      "A quiet cozy and picturesque that hides behind a a river by the unique lightness of Cologne.",
+      "A quiet cozy and picturesque place in Brussels",
+      "A quiet cozy and picturesque place in Paris",
+      "Warm Hotel",
+      "Welcome to my new house",
+      "Everything you want is here",
+      "I'll glad to see you in our apartments"
+    ],
+    "goods": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "images": [
+      "apartment-01.jpg",
+      "apartment-02.jpg",
+      "apartment-03.jpg",
+      "apartment-small-04.jpg",
+      "room.jpg",
+      "studio-01.jpg",
+      "studio-photos.jpg"
+    ],
+    "titles": [
+      "Beautiful & luxurious studio at great location",
+      "You should to see this!",
+      "Hey! Click me, you won't be disappointed!",
+      "Come On, choose me !:)"
+    ],
+    "types": [
+      "apartment",
+      "room",
+      "house",
+      "hotel"
+    ],
+    "avatarUrls": [
+      "avatar-angelina.jpg",
+      "avatar-max.jpg"
+    ],
+    "emails": [
+      "ivanov_s@mail.ru",
+      "sidorov_a@mail.ru",
+      "pivanov_m@mail.ru",
+      "alekseev_n@mail.ru",
+      "petrov_k@mail.ru"
+    ],
+    "names": [
+      "sergey",
+      "anatoliy",
+      "maxim",
+      "nikolai",
+      "konstantin"
+    ]
+  }
+}
