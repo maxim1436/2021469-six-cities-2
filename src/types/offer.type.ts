@@ -1,10 +1,12 @@
 import { Host } from './host.type.js';
 import { Goods } from './goods.type.js';
 import { Images } from './images.type.js';
+import { City } from './city.enum.js';
+import { RoomType } from './room-type.enum.js';
 
 export type Offer = {
   bedrooms: number;
-  city: string;
+  city: City;
   description: string;
   goods: Goods[];
   images: Images[];
@@ -17,7 +19,7 @@ export type Offer = {
   price: number;
   rating: number;
   title: string;
-  type: string;
+  type: RoomType;
   createdDate: Date;
   host: Host
 }
