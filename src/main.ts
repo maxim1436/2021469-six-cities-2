@@ -1,16 +1,30 @@
 import 'reflect-metadata';
 import {Container} from 'inversify';
+import {types} from '@typegoose/typegoose';
 import {LoggerInterface} from './common/logger/logger.interface.js';
 import LoggerService from './common/logger/logger.service.js';
 import {Component} from './types/component.types.js';
 import {ConfigInterface} from './common/config/config.interface.js';
 import ConfigService from './common/config/config.service.js';
 import Application from './app/application.js';
+import DatabaseService from './common/database-client/database.service.js';
+import {DatabaseInterface} from './common/database-client/database.interface.js';
+import HostService from './modules/host/host.service.js';
+import {HostServiceInterface} from './modules/host/host-service.interface.js';
+import {HostEntity, HostModel} from './modules/host/host.entity.js';
+import OfferService from './modules/offer/offer.service.js';
+import {OfferServiceInterface} from './modules/offer/offer-service.interface.js';
+import {OfferEntity, OfferModel} from './modules/offer/offer.entity.js';
 
 const applicationContainer = new Container();
 applicationContainer.bind<Application>(Component.Application).to(Application).inSingletonScope();
 applicationContainer.bind<LoggerInterface>(Component.LoggerInterface).to(LoggerService).inSingletonScope();
 applicationContainer.bind<ConfigInterface>(Component.ConfigInterface).to(ConfigService).inSingletonScope();
+applicationContainer.bind<DatabaseInterface>(Component.DatabaseInterface).to(DatabaseService).inSingletonScope();
+applicationContainer.bind<HostServiceInterface>(Component.HostServiceInterface).to(HostService);
+applicationContainer.bind<types.ModelType<HostEntity>>(Component.HostModel).toConstantValue(HostModel);
+applicationContainer.bind<OfferServiceInterface>(Component.OfferServiceInterface).to(OfferService);
+applicationContainer.bind<types.ModelType<OfferEntity>>(Component.OfferModel).toConstantValue(OfferModel);
 
 const application = applicationContainer.get<Application>(Component.Application);
 await application.init();

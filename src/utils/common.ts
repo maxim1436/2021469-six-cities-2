@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import { Offer } from '../types/offer.type';
 
 export const createOffer = (row: string) => {
@@ -27,5 +28,9 @@ export const createOffer = (row: string) => {
   } as Offer;
 };
 
-export const getErrorMessage = (error: unknown): string =>
-  error instanceof Error ? error.message : '';
+export const getErrorMessage = (error: unknown): string => error instanceof Error ? error.message : '';
+
+export const createSHA256 = (line: string, salt: string): string => {
+  const shaHasher = crypto.createHmac('sha256', salt);
+  return shaHasher.update(line).digest('hex');
+};
