@@ -29,7 +29,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/modules/comment/comment.entity.env", "src/modules/comment/comment-service.env", "src/modules/comment/dto/create-comment.dto.env"  ],
   "exclude": [
     "node_modules",
     "**/*.test.ts"
