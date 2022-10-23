@@ -1,0 +1,400 @@
+openapi: 3.1.0
+info:
+  title: API сервер для проекта «Шесть городов».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Шесть городов».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+tags:
+  - name: offers
+    description: Действия с объявлениями.
+  - name: comments
+    description: Действия с комментариями.
+  - name: hosts
+    description: Действия с пользователем.
+
+paths:
+  /hosts/register:
+    post:
+      tags:
+        - hosts
+      summary: Регистрация пользователя
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+        description: Информация для создания нового пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createHost'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь зарегестрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/host'
+
+        "409":
+          description: Пользователь с таким email уже существует
+
+  /hosts/login:
+    post:
+      tags:
+        - hosts
+      summary: Авторизация пользователя
+      description: Авторизует пользователя на основе логина и пароля
+
+    get:
+      tags:
+        - hosts
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию по авторизованному пользователю
+
+  /offers/create:
+    post:
+      tags:
+        - offers
+      summary: Создание нового предложения
+      description: Создаёт новое предложение.
+
+      requestBody:
+        description: Информация для создания нового предложения
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+        required: true
+
+      responses:
+        "201":
+          description: Предложение создано
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        "409":
+          description: Не удалось создать предложение
+
+
+  /offers/{offerId}/update:
+    post:
+      tags:
+        - offers
+      summary: Редактирует предложения.
+      description: Редактирует предложение.
+
+      requestBody:
+        description: Информация для редактирования предложения.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+        required: true
+
+
+        responses:
+          "201":
+            description: Предложение редактированно
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/offer'
+
+          "409":
+            description: Не удалось редактировать предложение
+
+  /offers/{offerId}/delete:
+    post:
+      tags:
+        - offers
+      summary: Удаление предложения
+      description: Удалит предложение
+
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Получениие списка предложений по аренде
+      description: Возвращает список предложений по аренде
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Получение детальной информации о предложении
+      description: Возвращает детальную информацию о предложении
+
+  /offers/cityName/premium:
+    get:
+      tags:
+        - offers
+      summary: Премиальные предложения для города
+      description: Возвращает примиальные предложения для города
+
+  /offers/favorites:
+    get:
+      tags:
+        - offers
+      summary: Список избранных предложениий
+      description: Возвращает список избранных предложениий
+
+  /offers/{offerId}/{status}:
+    post:
+      tags:
+        - offers
+      summary: Добавление и удаление предложения в/из избранного
+      description: Добавляет и удаляет предложения в/из избранного
+
+  /comments/{offerId}:
+    post:
+      tags:
+        - comments
+      summary: Добавить новый комментарий
+      description: Добавляет новый комментарий для предложения
+
+      requestBody:
+        description: Информация для создания нового комментария
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+        required: true
+
+      responses:
+        "201":
+          description: Комментарий создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+
+        "409":
+          description: Не удалось создать комментарий
+
+    get:
+      tags:
+        - comments
+      summary: Получить список комментариев
+      description: Возвращает список комментариев для предложенияыыыы
+
+components:
+  schemas:
+    createHost:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: pivanov_m@mail.ru
+
+        avatarUrl:
+          type: string
+          example: avatar-max.jpg
+
+        password:
+          type: string
+          example: 123456
+
+        name:
+          type: string
+          example: max
+
+    host:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        email:
+          type: string
+          example: pivanov_m@mail.ru
+
+        isPro:
+          type: boolean
+          example: true
+
+    createOffer:
+      type: object
+
+      properties:
+        bedrooms:
+          type: number
+          example: 3
+
+        city:
+          type: string
+          example: Paris
+
+        description:
+          type: string
+          example: A quiet cozy and picturesque that hides behind a river
+
+        goods:
+          type: string
+          example: Breakfast;Fridge
+
+        images:
+          type: string
+          example: room-small.jpg;apartment-small-03.jpg
+
+        isFavorite:
+          type: boolean
+          example: true
+
+        isPremium:
+          type: boolean
+          example: false
+
+        latitude:
+          type: number
+          example: 52.35514938496378
+
+        longitude:
+          type: number
+          example: 52.35514938496378
+
+        maxAdults:
+          type: number
+          example: 3
+
+        previewImage:
+          type: string
+          example: room-small.jpg
+
+        price:
+          type: number
+          example: 3
+
+        rating:
+          type: number
+          example: 3
+
+        title:
+          type: string
+          example: Beautiful & luxurious studio at great location
+
+        type:
+          type: string
+          example: room
+
+    offer:
+      type: object
+
+      properties:
+        createdDate:
+          type: string
+          example: 2022-06-06T08:45:40.283Z
+
+        hostId:
+          type: string
+          example: 6329c3d6a04ab1061c6425eas
+
+        bedrooms:
+          type: number
+          example: 3
+
+        city:
+          type: string
+          example: Paris
+
+        description:
+          type: string
+          example: A quiet cozy and picturesque that hides behind a river
+
+        goods:
+          type: string
+          example: Breakfast;Fridge
+
+        images:
+          type: string
+          example: room-small.jpg;apartment-small-03.jpg
+
+        isFavorite:
+          type: boolean
+          example: true
+
+        isPremium:
+          type: boolean
+          example: false
+
+        latitude:
+          type: number
+          example: 52.35514938496378
+
+        longitude:
+          type: number
+          example: 52.35514938496378
+
+        maxAdults:
+          type: number
+          example: 3
+
+        previewImage:
+          type: string
+          example: room-small.jpg
+
+        price:
+          type: number
+          example: 3
+
+        rating:
+          type: number
+          example: 3
+
+        title:
+          type: string
+          example: Beautiful & luxurious studio at great location
+
+        type:
+          type: string
+          example: room
+
+    createComment:
+      type: object
+
+      properties:
+        commentText:
+          type: string
+          example: Nice room.
+
+        rating:
+          type: number
+          example: 4
+
+    comment:
+      type: object
+
+      properties:
+        commentText:
+          type: string
+          example: Nice room.
+
+        rating:
+          type: number
+          example: 4
+
+        postDate:
+          type: string
+          example: 2022-06-06T08:45:40.283Z
+
+        hostId:
+          type: string
+          example: 6329c3d6a04ab1061c6425eas
+
+
+
+
+
+
+
+
+
+
