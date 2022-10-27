@@ -30,7 +30,7 @@ export default class OfferService implements OfferServiceInterface {
       .exec();
   }
 
-  public async find(count?: number): Promise<DocumentType<OfferEntity>[]> {
+  public async findByDefault(count?: number): Promise<DocumentType<OfferEntity>[]> {
     const limit = count ?? DEFAULT_OFFER_COUNT;
 
     return this.offerModel

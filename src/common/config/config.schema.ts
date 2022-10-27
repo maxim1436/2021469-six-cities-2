@@ -18,7 +18,7 @@ export const configSchema = convict<ConfigSchema>({
     doc: 'Port for incoming connections',
     format: 'port',
     env: 'PORT',
-    default: 4000
+    default: 5000
   },
   SALT: {
     doc: 'Salt for password hash',
