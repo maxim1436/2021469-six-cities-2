@@ -69,25 +69,27 @@ export default class OfferService implements OfferServiceInterface {
   }
 
   public async incCommentCount(offerId: string, commentRating: number): Promise<DocumentType<OfferEntity> | null> {
-    const offer = this.offerModel.findById(offerId);
-
-    if (offer.commentCount) {
-      const newRating = (offer.rating * offer.commentCount + commentRating) / (offer.commentCount + 1).toFixed(1);
-      return this.offerModel
-        .findByIdAndUpdate(offerId, {'$inc': {
-          commentCount: 1,
-        }})
-        .findByIdAndUpdate(offerId, {rating: newRating})
-        .exec();
-    } else {
-      const newRating = (offer.rating + commentRating).toFixed(1);
-      return this.offerModel
-        .findByIdAndUpdate(offerId, {'$inc': {
-          commentCount: 1,
-        }})
-        .findByIdAndUpdate(offerId, {rating: newRating})
-        .exec();
+    const offer = await this.findById(offerId);
+    if (offer) {
+      if (offer.commentCount) {
+        let newRating = +(((+offer.rating * offer.commentCount + commentRating) / (offer.commentCount + 1)).toFixed(0));
+        newRating = Number(newRating);
+        console.log(Number.isInteger(newRating));
+        await this.updateById(offerId, {rating: newRating});
+      } else {
+        let newRating = +((+offer.rating + commentRating).toFixed(0));
+        console.log(offer);
+        newRating = Number(newRating);
+        console.log(Number.isInteger(newRating));
+        await this.updateById(offerId, {rating: newRating});
+      }
     }
+
+    return this.offerModel
+      .findByIdAndUpdate(offerId, {'$inc': {
+        commentCount: 1,
+      }})
+      .exec();
   }
 
   public async findFavorites(): Promise<DocumentType<OfferEntity>[]> {
@@ -96,14 +98,4 @@ export default class OfferService implements OfferServiceInterface {
       .populate(['hostId'])
       .exec();
   }
-
-  public async findNew(count: number): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel
-      .find()
-      .sort({createdAt: SortType.Down})
-      .limit(count)
-      .populate(['userId', 'categories'])
-      .exec();
-  }
-
 }
