@@ -70,6 +70,9 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({required: true, minlength: [10, 'Min length for title is 10'], maxlength: [100, 'Max length for title is 100']})
   public title!: string;
 
+  @prop({default: 0})
+  public commentCount!: number;
+
   @prop({
     required: true,
     type: () => String,

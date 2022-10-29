@@ -20,6 +20,7 @@ export default class Application {
     @inject(Component.HostController) private hostController: ControllerInterface,
     @inject(Component.OfferController) private offerController: ControllerInterface,
     @inject(Component.ExceptionFilterInterface) private exceptionFilter: ExceptionFilterInterface,
+    @inject(Component.CommentController) private commentController: ControllerInterface,
   ) {
     this.expressApp = express();
   }
@@ -30,7 +31,9 @@ export default class Application {
 
   public initRoutes() {
     this.expressApp.use('/offers', this.offerController.router);
+    this.expressApp.use('/offers/premium', this.offerController.router);
     this.expressApp.use('/users', this.hostController.router);
+    this.expressApp.use('/comments', this.commentController.router);
   }
 
   public initMiddleware() {

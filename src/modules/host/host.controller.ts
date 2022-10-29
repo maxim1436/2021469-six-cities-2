@@ -12,6 +12,7 @@ import {fillDTO} from '../../utils/common.js';
 import HostResponse from './response/host.response.js';
 import {ConfigInterface} from '../../common/config/config.interface.js';
 import LoginHostDto from './dto/login-host.dto.js';
+import {ValidateDtoMiddleware} from '../../common/middlewares/validate-dto.middleware.js';
 
 @injectable()
 export default class HostController extends Controller {
@@ -23,8 +24,18 @@ export default class HostController extends Controller {
     super(logger);
     this.logger.info('Register routes for HostController…');
 
-    this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
-    this.addRoute({path: '/login', method: HttpMethod.Post, handler: this.login});
+    this.addRoute({
+      path: '/register',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateHostDto)]
+    });
+    this.addRoute({
+      path: '/login',
+      method: HttpMethod.Post,
+      handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginHostDto)]
+    });
   }
 
   public async create(

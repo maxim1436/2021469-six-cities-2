@@ -1,4 +1,5 @@
-import {Expose} from 'class-transformer';
+import {Expose, Type} from 'class-transformer';
+import HostResponse from '../../host/response/host.response.js';
 
 export default class OfferPostResponse {
   @Expose()
@@ -49,6 +50,7 @@ export default class OfferPostResponse {
   @Expose()
   public rating!: number;
 
-  @Expose()
-  public hostId!: string;
+  @Expose({ name: 'hostId'})
+  @Type(() => HostResponse)
+  public host!: HostResponse;
 }
