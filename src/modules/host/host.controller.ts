@@ -13,6 +13,8 @@ import HostResponse from './response/host.response.js';
 import {ConfigInterface} from '../../common/config/config.interface.js';
 import LoginHostDto from './dto/login-host.dto.js';
 import {ValidateDtoMiddleware} from '../../common/middlewares/validate-dto.middleware.js';
+import {ValidateObjectIdMiddleware} from '../../common/middlewares/validate-objectid.middleware.js';
+import {UploadFileMiddleware} from '../../common/middlewares/upload-file.middleware.js';
 
 @injectable()
 export default class HostController extends Controller {
@@ -35,6 +37,15 @@ export default class HostController extends Controller {
       method: HttpMethod.Post,
       handler: this.login,
       middlewares: [new ValidateDtoMiddleware(LoginHostDto)]
+    });
+    this.addRoute({
+      path: '/:userId/avatarUrl',
+      method: HttpMethod.Post,
+      handler: this.uploadAvatar,
+      middlewares: [
+        new ValidateObjectIdMiddleware('userId'),
+        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatarUrl'),
+      ]
     });
   }
 
@@ -79,5 +90,12 @@ export default class HostController extends Controller {
       'Not implemented',
       'UserController',
     );
+  }
+
+  public async uploadAvatar(req: Request, res: Response) {
+    console.log(req.file?.path);
+    this.created(res, {
+      filepath: req.file?.path
+    });
   }
 }
