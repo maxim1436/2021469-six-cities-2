@@ -2,7 +2,7 @@ import { City } from '../../../types/city.enum.js';
 import { RoomType } from '../../../types/room-type.enum.js';
 import { Goods } from '../../../types/goods.type.js';
 import { Images } from '../../../types/images.type.js';
-import {IsArray, IsDateString, IsEnum, IsInt, IsMongoId, Max, MaxLength, Min, MinLength, IsBoolean} from 'class-validator';
+import {IsArray, IsDateString, IsEnum, IsInt, Max, MaxLength, Min, MinLength, IsBoolean} from 'class-validator';
 
 export default class CreateOfferDto {
   @Min(1, {message: 'Minimum bedrooms is 1'})
@@ -60,6 +60,5 @@ export default class CreateOfferDto {
   @IsDateString({}, {message: 'postDate must be valid ISO date'})
   public createdDate!: Date;
 
-  @IsMongoId({message: 'userId field must be valid an id'})
   public hostId!: string;
 }
