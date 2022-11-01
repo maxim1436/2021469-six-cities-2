@@ -8,13 +8,15 @@ import CreateHostDto from './dto/create-host.dto.js';
 import {HostServiceInterface} from './host-service.interface.js';
 import HttpError from '../../common/errors/http-error.js';
 import {StatusCodes} from 'http-status-codes';
-import {fillDTO} from '../../utils/common.js';
+import {createJWT, fillDTO} from '../../utils/common.js';
 import HostResponse from './response/host.response.js';
 import {ConfigInterface} from '../../common/config/config.interface.js';
 import LoginHostDto from './dto/login-host.dto.js';
 import {ValidateDtoMiddleware} from '../../common/middlewares/validate-dto.middleware.js';
 import {ValidateObjectIdMiddleware} from '../../common/middlewares/validate-objectid.middleware.js';
 import {UploadFileMiddleware} from '../../common/middlewares/upload-file.middleware.js';
+import LoggedHostResponse from './response/logged-host.response.js';
+import {JWT_ALGORITM} from './host.constant.js';
 
 @injectable()
 export default class HostController extends Controller {
@@ -37,6 +39,11 @@ export default class HostController extends Controller {
       method: HttpMethod.Post,
       handler: this.login,
       middlewares: [new ValidateDtoMiddleware(LoginHostDto)]
+    });
+    this.addRoute({
+      path: '/login',
+      method: HttpMethod.Get,
+      handler: this.checkAuthenticate
     });
     this.addRoute({
       path: '/:userId/avatarUrl',
@@ -73,23 +80,24 @@ export default class HostController extends Controller {
 
   public async login(
     {body}: Request<Record<string, unknown>, Record<string, unknown>, LoginHostDto>,
-    _res: Response,
+    res: Response,
   ): Promise<void> {
-    const existsHost = await this.hostService.findByEmail(body.email);
+    const host = await this.hostService.verifyHost(body, this.configService.get('SALT'));
 
-    if (!existsHost) {
+    if (!host) {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
-        `User with email ${body.email} not found.`,
-        'UserController',
+        'Unauthorized',
+        'UserController'
       );
     }
-
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController',
+    const token = await createJWT(
+      JWT_ALGORITM,
+      this.configService.get('JWT_SECRET'),
+      { email: host.email, id: host.id}
     );
+
+    this.ok(res, fillDTO(LoggedHostResponse, {email: host.email, token}));
   }
 
   public async uploadAvatar(req: Request, res: Response) {
@@ -97,5 +105,11 @@ export default class HostController extends Controller {
     this.created(res, {
       filepath: req.file?.path
     });
+  }
+
+  public async checkAuthenticate(req: Request, res: Response) {
+    const user = await this.hostService.findByEmail(req.user.email);
+
+    this.ok(res, fillDTO(LoggedHostResponse, user));
   }
 }

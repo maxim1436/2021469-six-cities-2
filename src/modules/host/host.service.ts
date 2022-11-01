@@ -5,6 +5,7 @@ import CreateHostDto from './dto/create-host.dto.js';
 import {HostServiceInterface} from './host-service.interface.js';
 import {LoggerInterface} from '../../common/logger/logger.interface.js';
 import {Component} from '../../types/component.types.js';
+import LoginHostDto from './dto/login-host.dto.js';
 
 @injectable()
 export default class HostService implements HostServiceInterface {
@@ -35,5 +36,19 @@ export default class HostService implements HostServiceInterface {
     }
 
     return this.create(dto, salt);
+  }
+
+  public async verifyHost(dto: LoginHostDto, salt: string): Promise<DocumentType<HostEntity> | null> {
+    const user = await this.findByEmail(dto.email);
+
+    if (! user) {
+      return null;
+    }
+
+    if (user.verifyPassword(dto.password, salt)) {
+      return user;
+    }
+
+    return null;
   }
 }
